@@ -36,7 +36,7 @@ func Init(opts ...Option) error {
 		return err
 	}
 
-	return viper.Unmarshal(config)
+	return viper.Unmarshal(&config)
 }
 
 type Option func(*option)
@@ -72,4 +72,11 @@ func WithConfigType(configType string) Option{
 	return func(opt *option) {
 		opt.configFile = configType
 	}
+}
+
+func Get() *Config {
+	if config == nil {
+		config = &Config{}
+	}
+	return config
 }
