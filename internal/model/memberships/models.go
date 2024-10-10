@@ -2,13 +2,29 @@ package memberships
 
 import "time"
 
-type SignUpRequest struct {
-    Email    string `json:"email"`
-    Username string `json:"username"`
-    Password string `json:"password"`
-}
+type (
+        SignUpRequest struct {
+        Email    string `json:"email"`
+        Username string `json:"username"`
+        Password string `json:"password"`
+    }
 
-type UserModel struct {
+    LoginRequest struct {
+        Email string `json:"email"`
+        Password string `json:"password"`
+    }
+
+)
+
+type (
+    LoginResponse struct {
+        AccessToken string `json:"accsessToken"`
+    }
+
+)
+
+type (
+    UserModel struct {
     ID        int64     `db:"id"`
     Email     string    `db:"email"`
     Username  string    `db:"username"`
@@ -18,3 +34,5 @@ type UserModel struct {
     CreatedBy string    `db:"created_by"`
     UpdatedBy string    `db:"updated_by"`
 }
+
+)
