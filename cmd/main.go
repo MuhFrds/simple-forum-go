@@ -9,39 +9,40 @@ import (
 	"github.com/gin-gonic/gin"
 
 	membershipRepo "github.com/MuhFrds/simple-forum-go/internal/repository/memberships"
+	membershipSvc "github.com/MuhFrds/simple-forum-go/internal/service/memberships"
 )
 
 func main() {
-  r := gin.Default()
+    r := gin.Default()
 
-  var (
-    cfg * configs.Config
-  )
+    var (
+        cfg *configs.Config
+    )
 
-  err:= configs.Init(
-    configs.WithConfigFolder(
-      []string {"./internal/configs"},
-    ),
-    configs.WithConfigFile("config"),
-    configs.WithConfigType("config.yaml"),
-  )
+    err := configs.Init(
+        configs.WithConfigFolder(
+            []string{"./internal/configs"},
+        ),
+        configs.WithConfigFile("config"),
+        configs.WithConfigType("config.yaml"),
+    )
 
-  if err != nil {
-    log.Fatal("Gagal inisiasi config", err)
-  }
+    if err != nil {
+        log.Fatal("Gagal inisiasi config", err)
+    }
 
-  cfg = configs.Get()
-  log.Println("config", cfg)
+    cfg = configs.Get()
 
-  db, err:= internalsql.Connect(cfg.Database.DataSourceName)
-  if err != nil {
-    log.Fatal("Gagal inisiasi database", err)
-  }
+    db, err := internalsql.Connect(cfg.Database.DataSourceName)
+    if err != nil {
+        log.Fatal("Gagal inisiasi database", err)
+    }
 
-  _ = membershipRepo.NewRepository(db)
-  
-  membershipsHandler := memberships.NewHandler(r)
-  membershipsHandler.RegisterRoute()
+    membershipRepo := membershipRepo.NewRepository(db)
+    membershipService := membershipSvc.NewService(cfg, membershipRepo)
 
-  r.Run(cfg.Service.Port)
+    membershipsHandler := memberships.NewHandler(r, membershipService)
+    membershipsHandler.RegisterRoute()
+
+    r.Run(cfg.Service.Port)
 }
