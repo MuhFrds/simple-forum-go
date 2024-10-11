@@ -25,7 +25,7 @@ func (s *service) Login(ctx context.Context, req memberships.LoginRequest) (stri
 	if err != nil {
 		return "", errors.New("email or password is invalid")
 	}
-
+    
 	token, err := jwt.CreateToken(user.ID, user.Username, s.cfg.Service.SecretJWT)
 	if err != nil {
 		return "", err
