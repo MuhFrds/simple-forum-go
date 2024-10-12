@@ -5,11 +5,14 @@ import (
 
 	"github.com/MuhFrds/simple-forum-go/internal/configs"
 	"github.com/MuhFrds/simple-forum-go/internal/handlers/memberships"
+	"github.com/MuhFrds/simple-forum-go/internal/handlers/posts"
 	"github.com/MuhFrds/simple-forum-go/pkg/internalsql"
 	"github.com/gin-gonic/gin"
 
 	membershipRepo "github.com/MuhFrds/simple-forum-go/internal/repository/memberships"
+	postRepo "github.com/MuhFrds/simple-forum-go/internal/repository/posts"
 	membershipSvc "github.com/MuhFrds/simple-forum-go/internal/service/memberships"
+	postSvc "github.com/MuhFrds/simple-forum-go/internal/service/posts"
 )
 
 func main() {
@@ -38,11 +41,21 @@ func main() {
         log.Fatal("Gagal inisiasi database", err)
     }
 
+    r.Use(gin.Logger())
+    r.Use(gin.Recovery())
+
     membershipRepo := membershipRepo.NewRepository(db)
+    postRepo := postRepo.NewRepository(db)
+
+
     membershipService := membershipSvc.NewService(cfg, membershipRepo)
+    postService := postSvc.NewService(cfg, postRepo) 
 
     membershipsHandler := memberships.NewHandler(r, membershipService)
     membershipsHandler.RegisterRoute()
+    
+    postHandler := posts.NewHandler(r, postService)
+    postHandler.RegisterRoute()
 
     r.Run(cfg.Service.Port)
 }
