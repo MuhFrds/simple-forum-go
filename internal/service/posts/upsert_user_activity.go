@@ -30,7 +30,7 @@ func (s *service) UpsertUserActivity(ctx context.Context, postID, userID int64, 
 
 	if userActivity == nil {
 		// create user activity
-		if request.IsLiked {
+		if !request.IsLiked {
 			return errors.New("anda belum pernah like sebelumnya")
 		}
 		err = s.postRepo.CreateUserActivity(ctx, model)
@@ -46,5 +46,3 @@ func (s *service) UpsertUserActivity(ctx context.Context, postID, userID int64, 
 
 	return nil
 }
-
- 
