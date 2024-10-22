@@ -25,7 +25,7 @@ func (h *Handler) GetAllPost(c *gin.Context){
 	pageSize, err := strconv.Atoi(pageSizeStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": errors.New("invalid page index").Error(),
+			"error": errors.New("invalid page size").Error(),
 		})
 		return
 	}
