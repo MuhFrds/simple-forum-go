@@ -21,7 +21,7 @@ func (r *repository) CreatePost(ctx context.Context, model posts.PostModel) erro
 
 func (r *repository) GetAllPost(ctx context.Context, limit, offset int) (posts.GetAllPostResponse, error){
    query := `SELECT p.id, p.user_id, u.username, p.post_title , p.post_content, p.post_hashtags
-   FROM  posts p JOIN users u ON p.user_id = u.id LIMIT ? OFFSET ? ORDER BY p.updated_at DESC`
+   FROM  posts p JOIN users u ON p.user_id = u.id ORDER BY p.updated_at DESC LIMIT ? OFFSET ? `
 
    
    response := posts.GetAllPostResponse{}
@@ -37,7 +37,7 @@ func (r *repository) GetAllPost(ctx context.Context, limit, offset int) (posts.G
          model posts.PostModel
          username string
       )
-         err = rows.Scan(&model.ID, model.UserID, username, model.PostTitle, model.PostContent, model.PostHashtags)
+         err = rows.Scan(&model.ID, &model.UserID, &username, &model.PostTitle, &model.PostContent, &model.PostHashtags)
          if err != nil {
          return response, err 
          }
