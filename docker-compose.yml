@@ -2,11 +2,11 @@ version: "3"
 services:
   db:
     image: mysql:latest
-    container_name: local-mysql-fast-campus
+    container_name: local-mysql-simple-forum
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=superSecretPassword
       - MYSQL_DATABASE=fastcampus
     volumes:
-      - D:/Developments/dbdocker:/var/lib/mysql
+      - D:\Developments\dbdocker\FastCampus\simple-forum:/var/lib/mysql
